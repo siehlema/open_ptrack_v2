@@ -3,6 +3,22 @@ LABEL maintainer "Samir Tabriz"
 
 ARG branch=master
 
+RUN echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections && \
+    apt-get update && apt-get install -y apt-transport-https apt-utils less lsb-release udev wget && \
+    mkdir -p /etc/udev/rules.d/ && \
+    cd /tmp/ && \
+    wget https://www.stereolabs.com/developers/downloads/archives/ZED_SDK_Linux_Ubuntu16_v2.1.2.run && \
+    chmod +x ./ZED_SDK_Linux_Ubuntu16_*.run && \
+    ./ZED_SDK_Linux_Ubuntu16_*.run --noexec --keep --target temp_zed && \
+    rm -f ZED_SDK_Linux_Ubuntu16_*.run && \
+    cd temp_zed/ && \
+    ./linux_install_release.sh silent && \
+    rm -rf /var/lib/apt/lists/* && \
+    cd / && \
+    rm -rf /tmp/temp_zed
+
+RUN git clone --branch v2.2.x https://github.com/stereolabs/zed-ros-wrapper.git ~/workspace/ros/src/zed-ros-wrapper
+
 RUN /bin/bash -c "source /opt/ros/kinetic/setup.bash \
     && git clone https://github.com/openptrack/open_ptrack_v2 ~/workspace/ros/src/open_ptrack \
     && cd ~/workspace/ros/src/open_ptrack \
