@@ -53,8 +53,8 @@ add_library(${PROJECT_NAME}
   src/track3d.cpp
   src/tracker.cpp
   src/tracker3d.cpp
-  src/skeleton_tracker.cpp
-  src/skeleton_track.cpp
+#  src/skeleton_tracker.cpp
+#  src/skeleton_track.cpp
   src/track_object.cpp
   src/tracker_object.cpp
   )
