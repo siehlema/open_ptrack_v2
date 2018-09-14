@@ -71,7 +71,7 @@ add_executable(tracker3d apps/tracker_node_3d.cpp)
 target_link_libraries(tracker3d ${PROJECT_NAME} ${catkin_LIBRARIES})
 
 add_executable(${PROJECT_NAME}_skeleton_tracker_node
-  apps/skeleton_tracker_node.cpp
+#  apps/skeleton_tracker_node.cpp
   )
 target_link_libraries(${PROJECT_NAME}_skeleton_tracker_node
   ${PROJECT_NAME}
