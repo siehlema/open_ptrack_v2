@@ -1,4 +1,4 @@
-FROM nvidia/cudagl:9.0-devel-ubuntu16.04
+FROM nvidia/cudagl:9.2-devel-ubuntu16.04
 
 LABEL maintainer "Samir Tabriz"
 
