@@ -73,10 +73,10 @@ target_link_libraries(tracker3d ${PROJECT_NAME} ${catkin_LIBRARIES})
 #add_executable(${PROJECT_NAME}_skeleton_tracker_node
 #  apps/skeleton_tracker_node.cpp
 #  )
-target_link_libraries(${PROJECT_NAME}_skeleton_tracker_node
-  ${PROJECT_NAME}
-  ${catkin_LIBRARIES}
- )
+#target_link_libraries(${PROJECT_NAME}_skeleton_tracker_node
+#  ${PROJECT_NAME}
+#  ${catkin_LIBRARIES}
+# )
 
 add_executable(moving_average_filter apps/moving_average_filter_node.cpp)
 add_dependencies(moving_average_filter ${PROJECT_NAME}_gencfg)
