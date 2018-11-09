@@ -232,13 +232,16 @@ open_ptrack::detection::PersonClassifier<PointT>::evaluate (float height_person,
   int ymin = floor(yc - height / 2 + 0.5);
   double confidence;
 
-//std::cout << "Before copyMakeBorder: " << xmin << " " << ymin << " " << width << " " << height << std::endl;
+
+// std::cout << "Before copyMakeBorder: " << xmin << " " << ymin << " " << width << " " << height << std::endl;
+
+  ROS_INFO("(height) (%f) (xmin+width-1) (%i)",height_person,(xmin+width-1)  );
 
   if ((height > 0) & ((xmin+width-1) > 0))
   {
     // If near the border, fill with black:
     PointCloudPtr box(new PointCloud);
-    copyMakeBorder(image, box, xmin, ymin, width, height);
+    // copyMakeBorder(image, box, xmin, ymin, width, height);
     
     // Make the image match the correct size (used in the training stage):
     PointCloudPtr sample(new PointCloud);
@@ -278,6 +281,51 @@ open_ptrack::detection::PersonClassifier<PointT>::evaluate (float height_person,
   {
     confidence = std::numeric_limits<double>::quiet_NaN();
   } 
+
+
+
+              // pcl::visualization::PCLVisualizer viewer ("PCL visualizer"); 
+
+              // pcl::ModelCoefficients::Ptr plane_1 (new pcl::ModelCoefficients); 
+              // plane_1->values.resize (4); 
+              // plane_1->values[0] = ground_coeffs_(0); 
+              // plane_1->values[1] = ground_coeffs_(1); 
+              // plane_1->values[2] = ground_coeffs_(2); 
+              // plane_1->values[3] = ground_coeffs_(3); 
+
+              // viewer.addPlane (*plane_1, "plane_1", 0); 
+              // viewer.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 0.9, 0.1, 0.1 /*R,G,B*/, "plane_1", 0); 
+              // viewer.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_OPACITY, 0.6, "plane_1", 0); 
+              // viewer.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_REPRESENTATION, pcl::visualization::PCL_VISUALIZER_REPRESENTATION_WIREFRAME, "plane_1", 0); 
+
+
+
+              // pcl::ModelCoefficients::Ptr sphere_1 (new pcl::ModelCoefficients); 
+              // sphere_1->values.resize (4); 
+              // sphere_1->values[0] = it->getTCenter()(0); 
+              // sphere_1->values[1] = it->getTCenter()(1); 
+              // sphere_1->values[2] = it->getTCenter()(2); 
+              // sphere_1->values[3] = 0.1; 
+
+              // viewer.addSphere (*sphere_1, "sphere_1", 0); 
+              // viewer.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_COLOR, 0.9, 0.1, 0.1 /*R,G,B*/, "sphere_1", 0); 
+              // viewer.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_OPACITY, 0.6, "sphere_1", 0); 
+              // viewer.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_REPRESENTATION, pcl::visualization::PCL_VISUALIZER_REPRESENTATION_WIREFRAME, "sphere_1", 0); 
+
+              // pcl::visualization::PointCloudColorHandlerRGBField<PointT> rgb(sample);
+              // viewer.addPointCloud<PointT> (sample, rgb, "input_cloud");
+
+              // viewer.addCoordinateSystem (0.5, "axis", 0); 
+              // viewer.setBackgroundColor (0.05, 0.05, 0.05, 0); 
+              // viewer.setPosition (800, 400); 
+
+              // while (!viewer.wasStopped ()) 
+              // { 
+              //   viewer.spinOnce (10); 
+              // } 
+
+
+  // ROS_INFO("(confidence) (%d) \n",confidence);
   
   return confidence;
 }

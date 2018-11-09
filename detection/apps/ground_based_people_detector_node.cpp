@@ -1,3 +1,6 @@
+
+
+
 /*
  * Software License Agreement (BSD License)
  *
@@ -127,9 +130,10 @@ cameraInfoCallback (const sensor_msgs::CameraInfo::ConstPtr & msg)
 {
   if (!intrinsics_already_set)
   {
-    intrinsics_matrix << msg->K.elems[0], msg->K.elems[1], msg->K.elems[2],
-        msg->K.elems[3], msg->K.elems[4], msg->K.elems[5],
-        msg->K.elems[6], msg->K.elems[7], msg->K.elems[8];
+    // intrinsics_matrix << msg->K.elems[0], msg->K.elems[1], msg->K.elems[2],
+    //     msg->K.elems[3], msg->K.elems[4], msg->K.elems[5],
+    //     msg->K.elems[6], msg->K.elems[7], msg->K.elems[8];
+    intrinsics_matrix << 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0; // Kinect RGB camera intrinsics
     intrinsics_already_set = true;
   }
 }
@@ -302,7 +306,8 @@ main (int argc, char** argv)
   nh.param("std_dev_denoising", std_dev_denoising, 0.3);
 
   //	Eigen::Matrix3f intrinsics_matrix;
-  intrinsics_matrix << 525, 0.0, 319.5, 0.0, 525, 239.5, 0.0, 0.0, 1.0; // Kinect RGB camera intrinsics
+  // intrinsics_matrix << 525, 0.0, 319.5, 0.0, 525, 239.5, 0.0, 0.0, 1.0; // Kinect RGB camera intrinsics
+  intrinsics_matrix << 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0; // Kinect RGB camera intrinsics
 
   // Initialize transforms to be used to correct sensor tilt to identity matrix:
   Eigen::Affine3f transform, anti_transform;
@@ -335,6 +340,8 @@ main (int argc, char** argv)
   // People detection app initialization:
   people_detector.setVoxelSize(voxel_size);                        // set the voxel size
   people_detector.setMaxDistance(max_distance);                    // set maximum distance of people from the sensor
+            intrinsics_matrix << 349.955, 0.0, 345.262, 0.0, 349.955, 183.547, 0.0, 0.0, 1.0; // Kinect RGB camera intrinsics
+
   people_detector.setIntrinsics(intrinsics_matrix);                // set RGB camera intrinsic parameters
   people_detector.setClassifier(person_classifier);                // set person classifier
   people_detector.setHeightLimits(min_height, max_height);         // set person classifier
@@ -444,6 +451,15 @@ main (int argc, char** argv)
       DetectionArray::Ptr detection_array_msg(new DetectionArray);
       // Set camera-specific fields:
       detection_array_msg->header = cloud_header;
+
+
+      intrinsics_matrix << 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0; // Kinect RGB camera intrinsics
+
+      // anti_transform = transform.Identity();
+      
+      std::cout << "intrinsics_matrix is this \n" << intrinsics_matrix << std::endl;
+      // std::cout << "anti_transform is this \n" << &anti_transform << std::endl;
+
       for(int i = 0; i < 3; i++)
         for(int j = 0; j < 3; j++)
           detection_array_msg->intrinsic_matrix.push_back(intrinsics_matrix(i, j));
@@ -453,6 +469,7 @@ main (int argc, char** argv)
       // Add all valid detections:
       for(std::vector<pcl::people::PersonCluster<PointT> >::iterator it = clusters.begin(); it != clusters.end(); ++it)
       {
+        ROS_INFO("here is the perosn confidence %f\n", it->getPersonConfidence());
         if((!use_rgb) | (people_detector.getMeanLuminance() < minimum_luminance) |      // if RGB is not used or luminance is too low
             ((people_detector.getMeanLuminance() >= minimum_luminance) & (it->getPersonConfidence() > min_confidence)))            // if RGB is used, keep only people with confidence above a threshold
         {
@@ -490,11 +507,11 @@ main (int argc, char** argv)
 
           // Add message:
           detection_array_msg->detections.push_back(detection_msg);
-        }
+        
       }
       detection_pub.publish(detection_array_msg);		 // publish message
     }
-
+    }
     // Execute callbacks:
     ros::spinOnce();
     rate.sleep();
@@ -509,5 +526,3 @@ main (int argc, char** argv)
 
   return 0;
 }
-
-

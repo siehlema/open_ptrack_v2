@@ -1,4 +1,3 @@
-
 /*
  * Software License Agreement (BSD License)
  *
@@ -567,17 +566,12 @@ open_ptrack::detection::GroundBasedPeopleDetectionApp<PointT>::compute (std::vec
       {
         //Evaluate confidence for the current PersonCluster:
         Eigen::Vector3f centroid = intrinsics_matrix_ * (anti_transform_ * it->getTCenter());
-        // centroid /= centroid(2);
+        centroid /= centroid(2);
         Eigen::Vector3f top = intrinsics_matrix_ * (anti_transform_ * it->getTTop());
-        // top /= top(2);
+        top /= top(2);
         Eigen::Vector3f bottom = intrinsics_matrix_ * (anti_transform_ * it->getTBottom());
-        // bottom /= bottom(2);
+        bottom /= bottom(2);
 
-
-        ROS_INFO("(top) (%f %f %f)",it->getTTop()(0),it->getTTop()(1),it->getTTop()(2)  );
-        ROS_INFO("(centroid) (%f %f %f)",it->getTCenter()(0),it->getTCenter()(1),it->getTCenter()(2)  );
-        ROS_INFO("(bottom) (%f %f %f)",it->getTBottom()(0),it->getTBottom()(1),it->getTBottom()(2)  );
-        ROS_INFO("(new confidence) (%d) \n \n \n \n",it->getPersonConfidence());
 
 
               // pcl::visualization::PCLVisualizer viewer ("PCL visualizer"); 
@@ -594,6 +588,8 @@ open_ptrack::detection::GroundBasedPeopleDetectionApp<PointT>::compute (std::vec
               // viewer.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_OPACITY, 0.6, "plane_1", 0); 
               // viewer.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_REPRESENTATION, pcl::visualization::PCL_VISUALIZER_REPRESENTATION_WIREFRAME, "plane_1", 0); 
 
+
+
               // pcl::ModelCoefficients::Ptr sphere_1 (new pcl::ModelCoefficients); 
               // sphere_1->values.resize (4); 
               // sphere_1->values[0] = it->getTCenter()(0); 
@@ -607,6 +603,7 @@ open_ptrack::detection::GroundBasedPeopleDetectionApp<PointT>::compute (std::vec
               // viewer.setShapeRenderingProperties (pcl::visualization::PCL_VISUALIZER_REPRESENTATION, pcl::visualization::PCL_VISUALIZER_REPRESENTATION_WIREFRAME, "sphere_1", 0); 
 
 
+
               // pcl::visualization::PointCloudColorHandlerRGBField<PointT> rgb(no_ground_cloud_);
               // viewer.addPointCloud<PointT> (no_ground_cloud_, rgb, "input_cloud");
 
@@ -614,18 +611,24 @@ open_ptrack::detection::GroundBasedPeopleDetectionApp<PointT>::compute (std::vec
               // viewer.setBackgroundColor (0.05, 0.05, 0.05, 0); 
               // viewer.setPosition (800, 400); 
 
-              // // while (!viewer.wasStopped ()) 
-              // // { 
-              //   viewer.spinOnce (); 
-              //   sleep(5);
-              // // } 
+              // while (!viewer.wasStopped ()) 
+              // { 
+              //   viewer.spinOnce (10); 
+              // } 
 
 
-        it->setPersonConfidence(person_classifier_.evaluate(rgb_image_, it->getTBottom(), it->getTTop(), it->getTCenter(), vertical_));
+
+        ROS_INFO("(top) (%f %f %f)",it->getTTop()(0),it->getTTop()(1),it->getTTop()(2)  );
+        ROS_INFO("(centroid) (%f %f %f)",it->getTCenter()(0),it->getTCenter()(1),it->getTCenter()(2)  );
+        ROS_INFO("(bottom) (%f %f %f)",it->getTBottom()(0),it->getTBottom()(1),it->getTBottom()(2)  );
+
+        // it->setPersonConfidence(person_classifier_.evaluate(rgb_image_, it->getTBottom(), it->getTTop(), it->getTCenter(), vertical_));
         
-        ROS_INFO("(confidence) (%d) \n \n \n \n",it->getPersonConfidence());
+        // ROS_INFO("(confidence) (%d) \n \n \n \n",it->getPersonConfidence());
 
-        // it->setPersonConfidence(-2);
+        it->setPersonConfidence(2000);
+
+        ROS_INFO("(new confidence) (%d) \n \n \n \n",it->getPersonConfidence());
 
       }
     }
