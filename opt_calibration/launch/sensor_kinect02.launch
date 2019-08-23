@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!-- SESSION ID: 1559037332 -->
+<launch>
+
+  <!-- Sensor parameters -->
+  <arg name="sensor_id"     default="kinect02" />
+
+  <!-- Launch sensor -->
+  <include file="$(find detection)/launch/$(env KINECT_DRIVER).launch">
+    <arg name="rgb_camera_info_url" value="file://$(find opt_calibration)/camera_info/rgb_$(arg sensor_id).yaml" />
+    <arg name="camera"              value="$(arg sensor_id)" />
+  </include>
+
+  <!-- Publish a further transform -->
+  <node pkg="tf" type="static_transform_publisher" name="$(arg sensor_id)_broadcaster" args="-0.045 0 0 1.57079 -1.57079 0 /$(arg sensor_id) /$(arg sensor_id)_link  100" />
+
+</launch>

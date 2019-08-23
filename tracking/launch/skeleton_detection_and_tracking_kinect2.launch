@@ -2,6 +2,7 @@
 
   <arg name="skeletons_enabled" default="true" />
   <arg name="sensor_name" default="kinect2" />
+  <arg name="publish_frame" default="True" />
 
   <!-- Kinect2 -->
   <include file="$(find kinect2_bridge)/launch/kinect2_bridge.launch">

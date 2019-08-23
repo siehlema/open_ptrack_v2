@@ -4,7 +4,7 @@
 # Mininum confidence for track initialization:
 min_confidence_initialization: 0.0
 # Tracking maximum frame rate per sensor:
-rate: 10
+rate: 30
 # Tracking reference frame:
 world_frame_id: "/world"
 # Voxel size used for people detection:

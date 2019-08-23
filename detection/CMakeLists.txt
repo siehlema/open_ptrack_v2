@@ -3,6 +3,10 @@ project(detection)
 #set(CMAKE_BUILD_TYPE RelWithDebInfo)
 add_definitions("-std=c++11")
 
+#Searching CUDA
+find_package(CUDA REQUIRED)
+include_directories("${CUDA_INCLUDE_DIRS}")
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -29,6 +33,8 @@ find_package(catkin REQUIRED COMPONENTS
     kinect2_bridge
 )
 
+
+
 include_directories(${catkin_INCLUDE_DIRS})
 
 find_package(OpenMP REQUIRED)
@@ -39,6 +45,7 @@ find_package(Eigen3 REQUIRED)
 include_directories( ${EIGEN_INCLUDE_DIRS})
 find_package(PCL REQUIRED)
 include_directories( ${PCL_INCLUDE_DIRS} )
+link_directories(${PCL_LIBRARY_DIRS})
 find_package(OpenCV REQUIRED)
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 
@@ -94,3 +101,16 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}
 add_executable(ground_based_people_detector_zed apps/ground_based_people_detector_node_zed.cpp)
 SET_TARGET_PROPERTIES(ground_based_people_detector_zed PROPERTIES LINK_FLAGS -L${PCL_LIBRARY_DIRS})
 target_link_libraries(ground_based_people_detector_zed ${PROJECT_NAME} ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
+# Custom PCL GPU Executables
+add_executable(pcl_pcd_prob apps/pcl_pcd_prob.cpp)
+SET_TARGET_PROPERTIES(pcl_pcd_prob PROPERTIES LINK_FLAGS -L${PCL_LIBRARY_DIRS})
+target_link_libraries(pcl_pcd_prob ${PROJECT_NAME} ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
+add_executable(gpu_people apps/gpu_people.cpp)
+SET_TARGET_PROPERTIES(gpu_people PROPERTIES LINK_FLAGS -L${PCL_LIBRARY_DIRS})
+target_link_libraries(gpu_people ${PROJECT_NAME} ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
+add_executable(pcl_skeleton_detection apps/pcl_skeleton_node.cpp)
+SET_TARGET_PROPERTIES(pcl_skeleton_detection PROPERTIES LINK_FLAGS -L${PCL_LIBRARY_DIRS})
+target_link_libraries(pcl_skeleton_detection ${PROJECT_NAME} ${catkin_LIBRARIES} ${PCL_LIBRARIES})

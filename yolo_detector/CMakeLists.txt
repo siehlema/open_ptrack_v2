@@ -25,6 +25,9 @@ find_package(CUDA QUIET REQUIRED)
 
 find_package(Eigen3 REQUIRED)
 include_directories( ${EIGEN_INCLUDE_DIRS})
+
+# catkin_package( CATKIN_DEPENDS message_filters sensor_msgs image_transport Eigen3)
+
 SET(DARKNET_SRC_DIR "darknet_opt")
 
 file(GLOB SRC_LIST "${DARKNET_SRC_DIR}/src/*.c")

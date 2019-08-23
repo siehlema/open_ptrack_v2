@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!-- SESSION ID: 1559037332 -->
+<launch>
+
+  <arg name="enable_people_tracking" default="true" />
+  <arg name="enable_pose" default="true" />
+  <arg name="enable_object" default="true" />
+  <arg name="sensor_name" default="kinect02" />
+
+  <!-- Detection node OLD-->
+  <!--include file="$(find detection)/launch/detector_kinect1.launch">
+    <arg name="rgb_camera_info_url"     value="file://$(find opt_calibration)/camera_info/rgb_$(arg camera_name).yaml" />
+    <arg name="camera_name"             value="$(arg camera_name)" />
+    <arg name="ground_from_calibration" value="true" />
+  </include-->
+
+  <!-- Start Kinect1 Driver-->
+  <include file="$(find detection)/launch/detector_depth_kinect1.launch">
+    <arg name="camera_name" value="$(arg sensor_name)" />
+  </include>
+
+  <group if="$(arg enable_people_tracking)">
+    <!-- People tracking -->
+    <include file="$(find tracking)/launch/tracker_single.launch"/>
+  </group>
+
+  <group if="$(arg enable_pose)">
+    <!-- Skeleton tracking -->
+    <include file="$(find detection)/launch/skeleton_detector_kinect1.launch">
+      <arg name="sensor_name" value="$(arg sensor_name)" />
+    </include>
+    <!--include file="$(find tracking)/launch/skeleton_tracker_single.launch">
+      <arg name="input_topic" value="/detector/skeletons" />
+    </include-->
+    <!-- Pose recognition -->
+    <!--include file="$(find pose_recognition)/launch/pose_recognition.launch" /-->
+  </group>
+
+
+</launch>
